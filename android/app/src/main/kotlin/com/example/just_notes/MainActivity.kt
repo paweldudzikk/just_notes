@@ -1,4 +1,4 @@
-package com.example.just_notes
+package com.paweldudzik.just_notes
 
 import io.flutter.embedding.android.FlutterActivity
 
