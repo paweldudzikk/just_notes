@@ -18,11 +18,18 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 161, 152, 136),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 161, 152, 136),
-        onPressed: () {},
+        onPressed: () {
+          FirebaseFirestore.instance.collection('notes').add(
+            {
+              'title': controller.text,
+            },
+          );
+
+          controller.clear();
+        },
         child: const Icon(Icons.add),
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body: StreamBuilder<QuerySnapshot?>(
           stream: FirebaseFirestore.instance.collection('notes').snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -37,9 +44,7 @@ class HomePage extends StatelessWidget {
 
             return ListView(
               children: [
-                TaskWidget(documents[0]['title']),
-                TaskWidget(documents[0]['title']),
-                TaskWidget(documents[0]['title']),
+                for (final document in documents) TaskWidget(document['title']),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextField(
