@@ -34,9 +34,9 @@ class FinishTask extends StatelessWidget {
               for (final document in documents)
                 TaskWidget(
                   document['title'],
-                  
                   docId: document.id,
                   onTaskFinished: (String docId, String title) {},
+                  isStrikethrough: true,
                 ),
             ],
           );
