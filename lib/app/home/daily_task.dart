@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:just_notes/app/home/finish_task.dart';
 import 'package:just_notes/app/home/task_widget.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class DailyTask extends StatelessWidget {
+  DailyTask({super.key});
 
   final controller = TextEditingController();
 
