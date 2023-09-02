@@ -7,6 +7,15 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final controller = TextEditingController();
+  final bool isOnDailyTaskPage = true;
+
+  void onTaskFinished(String docId, String title) {
+    FirebaseFirestore.instance.collection('FinishedTask').add(
+      {'title': title},
+    );
+
+    FirebaseFirestore.instance.collection('notes').doc(docId).delete();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +90,9 @@ class HomePage extends StatelessWidget {
                     },
                     child: TaskWidget(
                       document['title'],
+                      docId: document.id,
+                      
+                      onTaskFinished: onTaskFinished,
                     ),
                   ),
                 Padding(
@@ -89,9 +101,16 @@ class HomePage extends StatelessWidget {
                     controller: controller,
                     decoration: const InputDecoration(
                       labelText: 'Enter a new task',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      labelStyle: TextStyle(color: Colors.black),
                     ),
                   ),
-                ),
+                )
               ],
             );
           }),
