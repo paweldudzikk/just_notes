@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:just_notes/app/home/home_page.dart';
+import 'package:just_notes/app/daily_task/home_page.dart';
 
 import 'firebase_options.dart';
 

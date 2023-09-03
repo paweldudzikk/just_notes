@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_notes/app/home/daily_task.dart';
+import 'package:just_notes/app/daily_task/daily_task.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({

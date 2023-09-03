@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:just_notes/app/home/task_widget.dart';
+import 'package:just_notes/app/daily_task/task_widget.dart';
 
 class FinishTask extends StatelessWidget {
   const FinishTask({super.key});
