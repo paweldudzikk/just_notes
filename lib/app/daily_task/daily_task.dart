@@ -58,70 +58,66 @@ class DailyTask extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
-        create: (context) => DailyTaskCubit(),
+        create: (context) => DailyTaskCubit()..start(),
         child: BlocBuilder<DailyTaskCubit, DailyTaskState>(
           builder: (context, state) {
-            return StreamBuilder<QuerySnapshot?>(
-                stream:
-                    FirebaseFirestore.instance.collection('notes').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('An unexpected error occurred');
-                  }
+            if (state.errorMassage.isNotEmpty) {
+              return Text(
+                  'An unexpected error occurred: ${state.errorMassage}');
+            }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text('Please wait while loading data');
-                  }
+            if (state.isLoading) {
+              return const Text('Please wait while loading data');
+            }
 
-                  final documents = snapshot.data!.docs;
+            final documents = state.documents;
 
-                  return ListView(
-                    children: [
-                      for (final document in documents)
-                        Dismissible(
-                          key: ValueKey(document.id),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            child: const Padding(
-                                padding: EdgeInsets.only(right: 15),
-                                child: Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                )),
-                          ),
-                          onDismissed: (_) {
-                            FirebaseFirestore.instance
-                                .collection('notes')
-                                .doc(document.id)
-                                .delete();
-                          },
-                          child: TaskWidget(
-                            document['title'],
-                            docId: document.id,
-                            onTaskFinished: onTaskFinished,
-                          ),
-                        ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextField(
-                          controller: controller,
-                          decoration: const InputDecoration(
-                            labelText: 'Enter a new task',
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            labelStyle: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                });
+            return ListView(
+              children: [
+                for (final document in documents)
+                  Dismissible(
+                    key: ValueKey(document.id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      child: const Padding(
+                          padding: EdgeInsets.only(right: 15),
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          )),
+                    ),
+                    onDismissed: (_) {
+                      FirebaseFirestore.instance
+                          .collection('notes')
+                          .doc(document.id)
+                          .delete();
+                    },
+                    child: TaskWidget(
+                      document['title'],
+                      docId: document.id,
+                      onTaskFinished: onTaskFinished,
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter a new task',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      labelStyle: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                )
+              ],
+            );
           },
         ),
       ),
