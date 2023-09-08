@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/daily_task/cubit/daily_task_cubit.dart';
 import 'package:just_notes/app/daily_task/finish_task.dart';
 import 'package:just_notes/app/daily_task/task_widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyTask extends StatelessWidget {
-  DailyTask({super.key});
+  DailyTask({Key? key}) : super(key: key);
 
-  final controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
 
   void onTaskFinished(String docId, String title) {
     FirebaseFirestore.instance.collection('FinishedTask').add(
@@ -20,59 +20,53 @@ class DailyTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const FinishTask()),
-                );
-              },
-              icon: const Icon(
-                Icons.check_box,
-                color: Colors.white,
-              ))
-        ],
-        title: const Text(
-          'DailyTask',
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-        backgroundColor: const Color.fromARGB(255, 161, 152, 136),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 161, 152, 136),
-        onPressed: () {
-          if (controller.text.trim().isEmpty) {
-            return;
+    return BlocProvider(
+      create: (context) => DailyTaskCubit()..start(),
+      child: BlocBuilder<DailyTaskCubit, DailyTaskState>(
+        builder: (context, state) {
+          if (state.errorMassage.isNotEmpty) {
+            return Text('An unexpected error occurred: ${state.errorMassage}');
           }
 
-          FirebaseFirestore.instance.collection('notes').add(
-            {
-              'title': controller.text,
-            },
-          );
-          controller.clear();
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: BlocProvider(
-        create: (context) => DailyTaskCubit()..start(),
-        child: BlocBuilder<DailyTaskCubit, DailyTaskState>(
-          builder: (context, state) {
-            if (state.errorMassage.isNotEmpty) {
-              return Text(
-                  'An unexpected error occurred: ${state.errorMassage}');
-            }
+          if (state.isLoading) {
+            return const Text('Please wait while loading data');
+          }
 
-            if (state.isLoading) {
-              return const Text('Please wait while loading data');
-            }
+          final documents = state.documents;
 
-            final documents = state.documents;
-
-            return ListView(
+          return Scaffold(
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FinishTask(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.check_box, color: Colors.white),
+                ),
+              ],
+              title: const Text(
+                'DailyTask',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              backgroundColor: const Color.fromARGB(255, 161, 152, 136),
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: const Color.fromARGB(255, 161, 152, 136),
+              onPressed: () {
+                if (controller.text.trim().isEmpty) {
+                  return;
+                }
+                context.read<DailyTaskCubit>().addTask(controller.text);
+                controller.clear();
+              },
+              child: const Icon(Icons.add),
+            ),
+            body: ListView(
               children: [
                 for (final document in documents)
                   Dismissible(
@@ -82,11 +76,12 @@ class DailyTask extends StatelessWidget {
                       color: Colors.red,
                       alignment: Alignment.centerRight,
                       child: const Padding(
-                          padding: EdgeInsets.only(right: 15),
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          )),
+                        padding: EdgeInsets.only(right: 15),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                     onDismissed: (_) {
                       FirebaseFirestore.instance
@@ -115,11 +110,11 @@ class DailyTask extends StatelessWidget {
                       labelStyle: TextStyle(color: Colors.black),
                     ),
                   ),
-                )
+                ),
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -16,6 +16,24 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
 
   StreamSubscription? _streamSubscription;
 
+  Future<void> addTask(
+    String title,
+  ) async {
+    try {
+      await FirebaseFirestore.instance.collection('notes').add(
+        {
+          'title': title,
+        },
+      );
+    } catch (error) {
+      emit(DailyTaskState(
+        documents: state.documents,
+        isLoading: true,
+        errorMassage: error.toString(),
+      ));
+    }
+  }
+
   Future<void> start() async {
     emit(const DailyTaskState(
       documents: [],
