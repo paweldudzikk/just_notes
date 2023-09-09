@@ -2,19 +2,21 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:just_notes/app/daily_task/models/item_model.dart';
+import 'package:just_notes/app/daily_task/repositories/items_repository.dart';
+import 'package:just_notes/app/models/item_model.dart';
 import 'package:meta/meta.dart';
 
 part 'daily_task_state.dart';
 
 class DailyTaskCubit extends Cubit<DailyTaskState> {
-  DailyTaskCubit()
+  DailyTaskCubit(this._itemsRepository)
       : super(const DailyTaskState(
           documents: [],
           isLoading: false,
           errorMassage: '',
         ));
 
+  final ItemsRepository _itemsRepository;
   StreamSubscription? _streamSubscription;
 
   Future<void> addTask(
@@ -59,18 +61,9 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
       errorMassage: '',
     ));
 
-    _streamSubscription = FirebaseFirestore.instance
-        .collection('notes')
-        .snapshots()
-        .listen((data) {
-      final itemModels = data.docs.map((document) {
-        return ItemModel(
-          title: document['title'],
-          id: document.id,
-        );
-      }).toList();
+    _streamSubscription = _itemsRepository.getItemsStream().listen((data) {
       emit(DailyTaskState(
-        documents: itemModels,
+        documents: data,
         isLoading: false,
         errorMassage: '',
       ));

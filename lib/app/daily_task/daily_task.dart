@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/daily_task/cubit/daily_task_cubit.dart';
 import 'package:just_notes/app/daily_task/finish_task.dart';
+import 'package:just_notes/app/daily_task/repositories/items_repository.dart';
 import 'package:just_notes/app/daily_task/task_widget.dart';
 
 class DailyTask extends StatelessWidget {
@@ -21,7 +22,7 @@ class DailyTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DailyTaskCubit()..start(),
+      create: (context) => DailyTaskCubit(ItemsRepository())..start(),
       child: BlocBuilder<DailyTaskCubit, DailyTaskState>(
         builder: (context, state) {
           if (state.errorMassage.isNotEmpty) {
