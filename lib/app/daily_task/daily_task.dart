@@ -32,7 +32,7 @@ class DailyTask extends StatelessWidget {
             return const Text('Please wait while loading data');
           }
 
-          final documents = state.documents;
+          final itemModels = state.documents;
 
           return Scaffold(
             appBar: AppBar(
@@ -68,9 +68,9 @@ class DailyTask extends StatelessWidget {
             ),
             body: ListView(
               children: [
-                for (final document in documents)
+                for (final itemModel in itemModels)
                   Dismissible(
-                    key: ValueKey(document.id),
+                    key: ValueKey(itemModel.id),
                     direction: DismissDirection.endToStart,
                     background: Container(
                       color: Colors.red,
@@ -84,14 +84,13 @@ class DailyTask extends StatelessWidget {
                       ),
                     ),
                     onDismissed: (_) {
-                      FirebaseFirestore.instance
-                          .collection('notes')
-                          .doc(document.id)
-                          .delete();
+                      context
+                          .read<DailyTaskCubit>()
+                          .remove(documentID: itemModel.id);
                     },
                     child: TaskWidget(
-                      document['title'],
-                      docId: document.id,
+                      itemModel.title,
+                      docId: itemModel.id,
                       onTaskFinished: onTaskFinished,
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:just_notes/app/daily_task/models/item_model.dart';
 import 'package:meta/meta.dart';
 
 part 'daily_task_state.dart';
@@ -34,6 +35,23 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
     }
   }
 
+  Future<void> remove({required String documentID}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('notes')
+          .doc(documentID)
+          .delete();
+    } catch (error) {
+      emit(
+        DailyTaskState(
+          documents: state.documents,
+          errorMassage: error.toString(),
+          isLoading: true,
+        ),
+      );
+    }
+  }
+
   Future<void> start() async {
     emit(const DailyTaskState(
       documents: [],
@@ -45,8 +63,14 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
         .collection('notes')
         .snapshots()
         .listen((data) {
+      final itemModels = data.docs.map((document) {
+        return ItemModel(
+          title: document['title'],
+          id: document.id,
+        );
+      }).toList();
       emit(DailyTaskState(
-        documents: data.docs,
+        documents: itemModels,
         isLoading: false,
         errorMassage: '',
       ));
