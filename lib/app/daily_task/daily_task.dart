@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/daily_task/cubit/daily_task_cubit.dart';
@@ -10,14 +9,6 @@ class DailyTask extends StatelessWidget {
   DailyTask({Key? key}) : super(key: key);
 
   final TextEditingController controller = TextEditingController();
-
-  void onTaskFinished(String docId, String title) {
-    FirebaseFirestore.instance.collection('FinishedTask').add(
-      {'title': title},
-    );
-
-    FirebaseFirestore.instance.collection('notes').doc(docId).delete();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +83,10 @@ class DailyTask extends StatelessWidget {
                     child: TaskWidget(
                       itemModel.title,
                       docId: itemModel.id,
-                      onTaskFinished: onTaskFinished,
+                      onTaskFinished: (docId, title) {
+                        context.read<DailyTaskCubit>().addToFinishedTask(title);
+                        context.read<DailyTaskCubit>().removeFromNotes(docId);
+                      },
                     ),
                   ),
                 Padding(

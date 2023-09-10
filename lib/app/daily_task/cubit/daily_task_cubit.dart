@@ -19,6 +19,46 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
   final ItemsRepository _itemsRepository;
   StreamSubscription? _streamSubscription;
 
+
+  
+  Future<void> addToFinishedTask(String title) async {
+  try {
+    await FirebaseFirestore.instance.collection('FinishedTask').add(
+      {'title': title},
+    );
+  } catch (error) {
+    emit(DailyTaskState(
+      documents: state.documents,
+      isLoading: false,
+      errorMassage: error.toString(),
+    ));
+  }
+}
+
+Future<void> removeFromNotes(String docId) async {
+  try {
+    await FirebaseFirestore.instance.collection('notes').doc(docId).delete();
+  } catch (error) {
+    emit(DailyTaskState(
+      documents: state.documents,
+      isLoading: false,
+      errorMassage: error.toString(),
+    ));
+  }
+}
+
+Future<void> onTaskFinished(String docId, String title) async {
+  await addToFinishedTask(title);
+  await removeFromNotes(docId);
+
+  // Poinformuj o zakończeniu zadania
+  emit(DailyTaskState(
+    documents: state.documents,
+    isLoading: false,
+    errorMassage: '', // Wyczyść ewentualny błąd
+  ));
+}
+
   Future<void> addTask(
     String title,
   ) async {
