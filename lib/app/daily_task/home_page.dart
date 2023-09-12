@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_notes/app/daily_task/daily_task.dart';
+import 'package:just_notes/app/note_book/note_book.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
         }
 
         if (currentIndex == 1) {
-          return DailyTask();
+          return const Notebook();
         }
 
         if (currentIndex == 2) {

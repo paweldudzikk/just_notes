@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_notes/app/daily_task/repositories/items_repository.dart';
 import 'package:just_notes/app/models/item_model.dart';
 import 'package:meta/meta.dart';
@@ -19,55 +18,47 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
   final ItemsRepository _itemsRepository;
   StreamSubscription? _streamSubscription;
 
-
-  
   Future<void> addToFinishedTask(String title) async {
-  try {
-    await FirebaseFirestore.instance.collection('FinishedTask').add(
-      {'title': title},
-    );
-  } catch (error) {
+    try {
+      await _itemsRepository.addToFinishedTask(title);
+    } catch (error) {
+      emit(DailyTaskState(
+        documents: state.documents,
+        isLoading: false,
+        errorMassage: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> removeFromNotes(String docId) async {
+    try {
+      await _itemsRepository.removeFromNotes(docId);
+    } catch (error) {
+      emit(DailyTaskState(
+        documents: state.documents,
+        isLoading: false,
+        errorMassage: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> onTaskFinished(String docId, String title) async {
+    await addToFinishedTask(title);
+    await removeFromNotes(docId);
+
+    // Poinformuj o zakończeniu zadania
     emit(DailyTaskState(
       documents: state.documents,
       isLoading: false,
-      errorMassage: error.toString(),
+      errorMassage: '', // Wyczyść ewentualny błąd
     ));
   }
-}
-
-Future<void> removeFromNotes(String docId) async {
-  try {
-    await FirebaseFirestore.instance.collection('notes').doc(docId).delete();
-  } catch (error) {
-    emit(DailyTaskState(
-      documents: state.documents,
-      isLoading: false,
-      errorMassage: error.toString(),
-    ));
-  }
-}
-
-Future<void> onTaskFinished(String docId, String title) async {
-  await addToFinishedTask(title);
-  await removeFromNotes(docId);
-
-  // Poinformuj o zakończeniu zadania
-  emit(DailyTaskState(
-    documents: state.documents,
-    isLoading: false,
-    errorMassage: '', // Wyczyść ewentualny błąd
-  ));
-}
 
   Future<void> addTask(
     String title,
   ) async {
     try {
-      await FirebaseFirestore.instance.collection('notes').add(
-        {
-          'title': title,
-        },
-      );
+      await _itemsRepository.addTask(title);
     } catch (error) {
       emit(DailyTaskState(
         documents: state.documents,
@@ -79,10 +70,7 @@ Future<void> onTaskFinished(String docId, String title) async {
 
   Future<void> remove({required String documentID}) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('notes')
-          .doc(documentID)
-          .delete();
+      await _itemsRepository.delete(id: documentID);
     } catch (error) {
       emit(
         DailyTaskState(

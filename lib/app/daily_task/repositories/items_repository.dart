@@ -15,4 +15,32 @@ class ItemsRepository {
       }).toList();
     });
   }
+
+  Future<void> delete({required String id}) {
+    return FirebaseFirestore.instance.collection('notes').doc(id).delete();
+  }
+
+  Future<void> addTask(String title) async {
+    {
+      await FirebaseFirestore.instance.collection('notes').add(
+        {
+          'title': title,
+        },
+      );
+    }
+  }
+
+  Future<void> addToFinishedTask(String title) async {
+    {
+      await FirebaseFirestore.instance.collection('FinishedTask').add(
+        {'title': title},
+      );
+    }
+  }
+
+  Future<void> removeFromNotes(String docId) {
+    {
+      return FirebaseFirestore.instance.collection('notes').doc(docId).delete();
+    }
+  }
 }
