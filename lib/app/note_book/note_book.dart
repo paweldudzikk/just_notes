@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:just_notes/app/note_book/cubit/add_note.dart';
+import 'package:just_notes/app/note_book/notebook_widget.dart';
 
 class Notebook extends StatelessWidget {
   const Notebook({
@@ -49,63 +50,36 @@ class Notebook extends StatelessWidget {
               childAspectRatio: 1,
               children: [
                 for (final document in documents) ...[
-                  NoteBookWidget(
-                    document['title'],
-                    document['text'],
+                  Dismissible(
+                    key: ValueKey(document.id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 15),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    onDismissed: (_) {
+                      FirebaseFirestore.instance
+                          .collection('notebook')
+                          .doc(document.id)
+                          .delete();
+                    },
+                    child: NoteBookWidget(
+                      document['title'],
+                      document['text'],
+                    
+                    ),
                   ),
                 ],
               ],
             );
           }),
-    );
-  }
-}
-
-class NoteBookWidget extends StatelessWidget {
-  final String title;
-  final String text;
-
-  const NoteBookWidget(
-    this.title,
-    this.text, {
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 161, 152, 136),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Color.fromARGB(255, 247, 240, 240),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 247, 240, 240),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

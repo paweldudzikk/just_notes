@@ -153,14 +153,18 @@ class _TaskWidgetState extends State<TaskWidget> with TickerProviderStateMixin {
               ),
             ),
             const SizedBox(width: 20),
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.white,
-                decoration: isStrikethrough
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    decoration: isStrikethrough
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  ),
+                ),
               ),
             ),
             IconButton(
