@@ -30,16 +30,14 @@ class NoteBookWidget extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Color.fromARGB(255, 247, 240, 240),
-                  ),
+            SingleChildScrollView(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Color.fromARGB(255, 247, 240, 240),
                 ),
               ),
             ),
@@ -47,7 +45,7 @@ class NoteBookWidget extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.topLeft,
                   child: Text(
                     text,
                     style: const TextStyle(
