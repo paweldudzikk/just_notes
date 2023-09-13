@@ -34,11 +34,11 @@ class AddNote extends StatelessWidget {
               labelStyle: TextStyle(color: Colors.black),
             ),
           ),
-          const SizedBox(height: 16.0), // Odstęp pomiędzy polami
+          const SizedBox(height: 16.0), 
           TextField(
             controller: textController,
             maxLines:
-                null, // Ustawienie na null umożliwia dynamiczny rozwój liczby wierszy.
+                null, 
             decoration: const InputDecoration(
               labelText: 'text',
               focusedBorder: UnderlineInputBorder(
@@ -50,7 +50,7 @@ class AddNote extends StatelessWidget {
               labelStyle: TextStyle(color: Colors.black),
             ),
           ),
-          const SizedBox(height: 16.0), // Odstęp pomiędzy polami
+          const SizedBox(height: 16.0), 
           ElevatedButton(
             onPressed: () {
               final title = titleController.text;

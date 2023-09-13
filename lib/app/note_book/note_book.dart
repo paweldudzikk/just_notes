@@ -73,7 +73,7 @@ class Notebook extends StatelessWidget {
                     child: NoteBookWidget(
                       document['title'],
                       document['text'],
-                    
+                      document.id,
                     ),
                   ),
                 ],

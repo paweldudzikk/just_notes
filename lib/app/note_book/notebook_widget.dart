@@ -4,10 +4,12 @@ import 'package:just_notes/app/note_book/edit_nota.dart';
 class NoteBookWidget extends StatelessWidget {
   final String title;
   final String text;
+  final String noteId; // Dodaj to pole
 
   const NoteBookWidget(
     this.title,
-    this.text, {
+    this.text,
+    this.noteId, {
     Key? key,
   }) : super(key: key);
 
@@ -16,7 +18,9 @@ class NoteBookWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EditNotePage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditNotePage(noteId: noteId)));
       },
       child: Container(
         decoration: BoxDecoration(
