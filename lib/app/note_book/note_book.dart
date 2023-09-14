@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/note_book/cubit/add_note.dart';
+import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'package:just_notes/app/note_book/notebook_widget.dart';
 
 class Notebook extends StatelessWidget {
@@ -30,18 +31,20 @@ class Notebook extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('notebook').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text('An unexpected error occurred');
+      body: BlocProvider(
+          create: (context) => NoteBookCubit()..start(),
+          child: BlocBuilder<NoteBookCubit, NoteBookState>(
+              builder: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              return Text(
+                  'An unexpected error occurred: ${state.errorMessage}');
             }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (state.isLoading) {
               return const Text('Please wait while loading data');
             }
 
-            final documents = snapshot.data!.docs;
+            final documents = state.documents;
 
             return GridView.count(
               mainAxisSpacing: 10,
@@ -64,12 +67,9 @@ class Notebook extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onDismissed: (_) {
-                      FirebaseFirestore.instance
-                          .collection('notebook')
-                          .doc(document.id)
-                          .delete();
-                    },
+                    onDismissed: (_) => context
+                        .read<NoteBookCubit>()
+                        .remove(documentID: document.id),
                     child: NoteBookWidget(
                       document['title'],
                       document['text'],
@@ -79,7 +79,7 @@ class Notebook extends StatelessWidget {
                 ],
               ],
             );
-          }),
+          })),
     );
   }
 }

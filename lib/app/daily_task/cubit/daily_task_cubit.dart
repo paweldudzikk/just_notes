@@ -46,11 +46,10 @@ class DailyTaskCubit extends Cubit<DailyTaskState> {
     await addToFinishedTask(title);
     await removeFromNotes(docId);
 
-    // Poinformuj o zakończeniu zadania
     emit(DailyTaskState(
       documents: state.documents,
       isLoading: false,
-      errorMassage: '', // Wyczyść ewentualny błąd
+      errorMassage: '', 
     ));
   }
 
