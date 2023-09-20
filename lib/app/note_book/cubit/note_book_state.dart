@@ -12,3 +12,24 @@ class NoteBookState {
     required this.errorMessage,
   });
 }
+
+
+
+//  Future<void> addNote(String title, String text) async {
+//     try {
+//       await FirebaseFirestore.instance.collection('notebook').add(
+//         {'title': title, 'text': text},
+//       );
+//       emit(const NoteBookState(
+//         documents: [],
+//         errorMessage: '',
+//         isLoading: true,
+//       ));
+//     } catch (error) {
+//       emit(const NoteBookState(
+//         documents: [],
+//         isLoading: false,
+//         errorMessage: 'error',
+//       ));
+//     }
+//   }

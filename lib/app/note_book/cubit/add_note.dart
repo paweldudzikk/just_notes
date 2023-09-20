@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'package:just_notes/app/note_book/note_book.dart';
 
 class AddNote extends StatelessWidget {
@@ -34,11 +35,10 @@ class AddNote extends StatelessWidget {
               labelStyle: TextStyle(color: Colors.black),
             ),
           ),
-          const SizedBox(height: 16.0), 
+          const SizedBox(height: 16.0),
           TextField(
             controller: textController,
-            maxLines:
-                null, 
+            maxLines: null,
             decoration: const InputDecoration(
               labelText: 'text',
               focusedBorder: UnderlineInputBorder(
@@ -50,18 +50,14 @@ class AddNote extends StatelessWidget {
               labelStyle: TextStyle(color: Colors.black),
             ),
           ),
-          const SizedBox(height: 16.0), 
+          const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
               final title = titleController.text;
               final text = textController.text;
 
-         
               if (title.isNotEmpty && text.isNotEmpty) {
-                FirebaseFirestore.instance.collection('notebook').add({
-                  'title': title,
-                  'text': text,
-                });
+                context.read<NoteBookCubit>().addNote(title, text);
 
                 titleController.clear();
                 textController.clear();
@@ -72,7 +68,6 @@ class AddNote extends StatelessWidget {
                   ),
                 );
               }
-          
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(

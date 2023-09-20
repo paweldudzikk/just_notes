@@ -18,6 +18,26 @@ class NoteBookCubit extends Cubit<NoteBookState> {
 
   StreamSubscription? _streamSubscription;
 
+  Future<void> addNote(String title, String text) async {
+    try {
+      await FirebaseFirestore.instance.collection('notebook').add({
+        'title': title,
+        'text': text,
+      });
+      emit(const NoteBookState(
+        documents: [],
+        errorMessage: '',
+        isLoading: true,
+      ));
+    } catch (error) {
+      emit(const NoteBookState(
+        documents: [],
+        isLoading: false,
+        errorMessage: 'error',
+      ));
+    }
+  }
+
   Future<void> remove({required String documentID}) async {
     try {
       await FirebaseFirestore.instance
@@ -31,6 +51,24 @@ class NoteBookCubit extends Cubit<NoteBookState> {
         isLoading: true,
       ));
       start();
+    }
+  }
+
+  Future<void> update(String title, String text, String noteId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('notebook')
+          .doc(noteId)
+          .update({
+        'title': title,
+        'text': text,
+      });
+    } catch (error) {
+      emit(NoteBookState(
+        documents: [],
+        isLoading: false,
+        errorMessage: error.toString(),
+      ));
     }
   }
 
