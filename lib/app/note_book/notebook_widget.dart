@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_notes/app/note_book/edit_nota.dart';
+import 'package:just_notes/app/note_book/cubit/add_note.dart';
 
 class NoteBookWidget extends StatelessWidget {
   final String title;
@@ -18,9 +18,7 @@ class NoteBookWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditNotePage(noteId: noteId)));
+            context, MaterialPageRoute(builder: (context) => AddNote()));
       },
       child: Container(
         decoration: BoxDecoration(
