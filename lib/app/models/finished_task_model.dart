@@ -1,8 +1,8 @@
-class ItemModel {
+class FinishedTaskModel {
   final String title;
   final String id;
 
-  ItemModel({
+  FinishedTaskModel({
     required this.title,
     required this.id,
   });

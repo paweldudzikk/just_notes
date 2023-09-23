@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:just_notes/app/note_book/cubit/add_note.dart';
 import 'package:just_notes/app/note_book/edit_note.dart';
 
 class NoteBookWidget extends StatelessWidget {
@@ -18,7 +17,7 @@ class NoteBookWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Przenosimy się do strony edycji notatki, przekazując aktualne dane
+  
         Navigator.push(
           context,
           MaterialPageRoute(

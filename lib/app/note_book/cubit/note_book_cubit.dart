@@ -65,7 +65,7 @@ class NoteBookCubit extends Cubit<NoteBookState> {
       });
     } catch (error) {
       emit(NoteBookState(
-        documents: [],
+        documents: const [],
         isLoading: false,
         errorMessage: error.toString(),
       ));

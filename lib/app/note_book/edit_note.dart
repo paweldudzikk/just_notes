@@ -60,8 +60,8 @@ class EditNotePage extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all(
                   const Color.fromARGB(255, 161, 152, 136),
                 ),
-                minimumSize: MaterialStateProperty.all(Size(double.infinity,
-                    50)), // Dostosuj szerokość i wysokość przycisku
+                minimumSize: MaterialStateProperty.all(const Size(double.infinity,
+                    50)), //
               ),
               child: const Icon(
                 Icons.change_circle_outlined,
