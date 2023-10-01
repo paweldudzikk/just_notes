@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_notes/app/daily_task/home_page.dart';
+import 'package:just_notes/home_page.dart';
 import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'firebase_options.dart';
 

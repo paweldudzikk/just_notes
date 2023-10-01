@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/daily_task/finished_task/cubit/finished_task_cubit.dart';
 import 'package:just_notes/app/daily_task/finished_task/cubit/finished_task_state.dart';
+import 'package:just_notes/app/daily_task/repositories/finish_task_repository.dart';
 import 'package:just_notes/app/daily_task/task_widget.dart';
 
 class FinishTask extends StatelessWidget {
@@ -18,7 +19,9 @@ class FinishTask extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) => FinishedTaskCubit()..start(),
+        create: (context) => FinishedTaskCubit(
+          FinishedTaskRepository(),
+        )..start(),
         child: BlocBuilder<FinishedTaskCubit, FinishedTaskState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {
