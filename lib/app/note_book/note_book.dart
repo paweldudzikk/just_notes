@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/note_book/cubit/add_note.dart';
 import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'package:just_notes/app/note_book/notebook_widget.dart';
+import 'package:just_notes/app/repositories/note_book_repository.dart';
 
 class Notebook extends StatelessWidget {
   const Notebook({
@@ -32,7 +33,7 @@ class Notebook extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
-          create: (context) => NoteBookCubit()..start(),
+          create: (context) => NoteBookCubit(NoteBookRepository())..start(),
           child: BlocBuilder<NoteBookCubit, NoteBookState>(
               builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {

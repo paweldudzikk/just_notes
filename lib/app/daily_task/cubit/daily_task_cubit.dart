@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:just_notes/app/daily_task/repositories/items_repository.dart';
+import 'package:just_notes/app/repositories/items_repository.dart';
 import 'package:just_notes/app/daily_task/models/item_model.dart';
 import 'package:meta/meta.dart';
 

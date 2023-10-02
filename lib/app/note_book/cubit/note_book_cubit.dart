@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:just_notes/app/note_book/models/notebook_models.dart';
+import 'package:just_notes/app/repositories/note_book_repository.dart';
 
 part 'note_book_state.dart';
 
 class NoteBookCubit extends Cubit<NoteBookState> {
-  NoteBookCubit()
+  NoteBookCubit(this._noteBookRepository)
       : super(
           const NoteBookState(
             documents: [],
@@ -18,13 +19,11 @@ class NoteBookCubit extends Cubit<NoteBookState> {
         );
 
   StreamSubscription? _streamSubscription;
+  final NoteBookRepository _noteBookRepository;
 
   Future<void> addNote(String title, String text) async {
     try {
-      await FirebaseFirestore.instance.collection('notebook').add({
-        'title': title,
-        'text': text,
-      });
+      await _noteBookRepository.addNote(title, text);
       emit(const NoteBookState(
         documents: [],
         errorMessage: '',
@@ -41,10 +40,7 @@ class NoteBookCubit extends Cubit<NoteBookState> {
 
   Future<void> remove({required String documentID}) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('notebook')
-          .doc(documentID)
-          .delete();
+      await _noteBookRepository.delete(id: documentID);
     } catch (error) {
       emit(const NoteBookState(
         documents: [],
@@ -57,13 +53,7 @@ class NoteBookCubit extends Cubit<NoteBookState> {
 
   Future<void> update(String title, String text, String noteId) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('notebook')
-          .doc(noteId)
-          .update({
-        'title': title,
-        'text': text,
-      });
+      await _noteBookRepository.update(title, text, noteId);
     } catch (error) {
       emit(NoteBookState(
         documents: const [],
@@ -82,31 +72,25 @@ class NoteBookCubit extends Cubit<NoteBookState> {
       ),
     );
 
-    _streamSubscription = FirebaseFirestore.instance
-        .collection('notebook')
-        .snapshots()
-        .listen((data) {
-      final notebookModel = data.docs.map((document) {
-        return NoteBookModel(
-            title: document['title'], text: document['text'], id: document.id);
-      }).toList();
+    _streamSubscription =
+        _noteBookRepository.getNotebookStream().listen((data) {
       emit(
         NoteBookState(
-          documents: notebookModel,
+          documents: data,
           isLoading: false,
           errorMessage: '',
         ),
       );
     })
-      ..onError((error) {
-        emit(
-          NoteBookState(
-            documents: const [],
-            isLoading: false,
-            errorMessage: error.toString(),
-          ),
-        );
-      });
+          ..onError((error) {
+            emit(
+              NoteBookState(
+                documents: const [],
+                isLoading: false,
+                errorMessage: error.toString(),
+              ),
+            );
+          });
   }
 
   @override

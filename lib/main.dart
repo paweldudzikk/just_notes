@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_notes/app/repositories/note_book_repository.dart';
 import 'package:just_notes/home_page.dart';
 import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'firebase_options.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NoteBookCubit>(
-          create: (context) => NoteBookCubit()..start(),
+          create: (context) => NoteBookCubit(NoteBookRepository())..start(),
         ),
       ],
       child: MaterialApp(

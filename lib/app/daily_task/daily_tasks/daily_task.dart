@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_notes/app/daily_task/daily_tasks/cubit/daily_task_cubit.dart';
 import 'package:just_notes/app/daily_task/finished_task/finished_task.dart';
-import 'package:just_notes/app/daily_task/repositories/items_repository.dart';
+import 'package:just_notes/app/repositories/items_repository.dart';
 import 'package:just_notes/app/daily_task/task_widget/task_widget.dart';
 
 class DailyTask extends StatelessWidget {

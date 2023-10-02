@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
-import 'package:just_notes/app/daily_task/repositories/finish_task_repository.dart';
+import 'package:just_notes/app/repositories/finish_task_repository.dart';
 
 import 'finished_task_state.dart';
 
