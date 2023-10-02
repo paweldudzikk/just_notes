@@ -2,14 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:just_notes/app/models/finished_task_model.dart';
+import 'package:just_notes/app/daily_task/repositories/finish_task_repository.dart';
 
 import 'finished_task_state.dart';
 
 class FinishedTaskCubit extends Cubit<FinishedTaskState> {
-  FinishedTaskCubit()
+  FinishedTaskCubit(this._finishedTaskRepository)
       : super(
           const FinishedTaskState(
             documents: [],
@@ -18,7 +16,11 @@ class FinishedTaskCubit extends Cubit<FinishedTaskState> {
           ),
         );
 
+  final FinishedTaskRepository _finishedTaskRepository;
   StreamSubscription? _streamSubscription;
+
+
+
 
   Future<void> start() async {
     emit(
@@ -29,33 +31,25 @@ class FinishedTaskCubit extends Cubit<FinishedTaskState> {
       ),
     );
 
-    _streamSubscription = FirebaseFirestore.instance
-        .collection('FinishedTask')
-        .snapshots()
-        .listen((data) {
-      final finishedTaskModels = data.docs.map((document) {
-        return FinishedTaskModel(
-          title: document['title'],
-          id: document.id,
-        );
-      }).toList();
+    _streamSubscription =
+        _finishedTaskRepository.getfinishTaskStream().listen((data) {
       emit(
         FinishedTaskState(
-          documents: finishedTaskModels,
+          documents: data,
           isLoading: false,
           errorMessage: '',
         ),
       );
     })
-      ..onError((error) {
-        emit(
-          FinishedTaskState(
-            documents: const [],
-            isLoading: false,
-            errorMessage: error.toString(),
-          ),
-        );
-      });
+          ..onError((error) {
+            emit(
+              FinishedTaskState(
+                documents: const [],
+                isLoading: false,
+                errorMessage: error.toString(),
+              ),
+            );
+          });
   }
 
   @override
