@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
+import 'package:just_notes/app/note_book/models/notebook_models.dart';
 
 part 'note_book_state.dart';
 
@@ -85,9 +86,13 @@ class NoteBookCubit extends Cubit<NoteBookState> {
         .collection('notebook')
         .snapshots()
         .listen((data) {
+      final notebookModel = data.docs.map((document) {
+        return NoteBookModel(
+            title: document['title'], text: document['text'], id: document.id);
+      }).toList();
       emit(
         NoteBookState(
-          documents: data.docs,
+          documents: notebookModel,
           isLoading: false,
           errorMessage: '',
         ),

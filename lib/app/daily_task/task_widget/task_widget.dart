@@ -56,8 +56,7 @@ class _TaskWidgetState extends State<TaskWidget> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> scheduleNotification(
-      DateTime scheduledDate, String title) async {
+  void scheduleNotification(DateTime scheduledDate, String title) {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,

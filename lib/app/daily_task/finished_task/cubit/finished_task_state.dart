@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_notes/app/models/finished_task_model.dart';
+import 'package:just_notes/app/daily_task/models/finished_task_model.dart';
 
 @immutable
 class FinishedTaskState {

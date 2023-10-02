@@ -44,7 +44,7 @@ class Notebook extends StatelessWidget {
               return const Text('Please wait while loading data');
             }
 
-            final documents = state.documents;
+            final notebookModels = state.documents;
 
             return GridView.count(
               mainAxisSpacing: 10,
@@ -52,9 +52,9 @@ class Notebook extends StatelessWidget {
               crossAxisCount: 2,
               childAspectRatio: 1,
               children: [
-                for (final document in documents) ...[
+                for (final notebookModel in notebookModels) ...[
                   Dismissible(
-                    key: ValueKey(document.id),
+                    key: ValueKey(notebookModel.id),
                     direction: DismissDirection.endToStart,
                     background: Container(
                       color: Colors.red,
@@ -69,12 +69,9 @@ class Notebook extends StatelessWidget {
                     ),
                     onDismissed: (_) => context
                         .read<NoteBookCubit>()
-                        .remove(documentID: document.id),
-                    child: NoteBookWidget(
-                      document['title'],
-                      document['text'],
-                      document.id,
-                    ),
+                        .remove(documentID: notebookModel.id),
+                    child: NoteBookWidget(notebookModel.title,
+                        notebookModel.text, notebookModel.id),
                   ),
                 ],
               ],

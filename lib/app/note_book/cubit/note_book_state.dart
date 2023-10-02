@@ -2,12 +2,12 @@ part of 'note_book_cubit.dart';
 
 @immutable
 class NoteBookState {
-  final List<QueryDocumentSnapshot<Object?>> documents;
+  final List<NoteBookModel> documents;
   final bool isLoading;
   final String errorMessage;
 
   const NoteBookState({
-    required this.documents,
+    this.documents = const [],
     required this.isLoading,
     required this.errorMessage,
   });

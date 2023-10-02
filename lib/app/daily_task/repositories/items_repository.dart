@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:just_notes/app/models/item_model.dart';
+import 'package:just_notes/app/daily_task/models/item_model.dart';
 
 class ItemsRepository {
   Stream<List<ItemModel>> getItemsStream() {
