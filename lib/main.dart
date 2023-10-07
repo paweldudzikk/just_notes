@@ -7,6 +7,7 @@ import 'package:just_notes/app/login/login_page.dart';
 import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'package:just_notes/app/repositories/note_book_repository.dart';
 import 'package:just_notes/firebase_options.dart';
+import 'package:just_notes/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,7 +54,9 @@ class RootPage extends StatelessWidget {
           if (user == null) {
             return LoginPage();
           }
-          return HomePage(user: user);
+          return FirstPage(
+            user: user,
+          );
         });
   }
 }

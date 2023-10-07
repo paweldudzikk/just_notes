@@ -16,6 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var errorMessage = '';
+  var isCreatingAccount = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,9 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Log in',
-                style: TextStyle(
+              Text(
+                isCreatingAccount == true ? 'Register' : 'Log in',
+                style: const TextStyle(
                   fontSize: 50,
                 ),
               ),
@@ -56,18 +57,34 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  try {
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: widget.emailController.text,
-                      password: widget.passwordController.text,
-                    );
-                  } catch (error) {
-                    setState(() {
-                      errorMessage = errorMessage.toString();
-                    });
+                  if (isCreatingAccount == true) {
+                    try {
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                        email: widget.emailController.text,
+                        password: widget.passwordController.text,
+                      );
+                    } catch (error) {
+                      setState(() {
+                        errorMessage = errorMessage.toString();
+                      });
+                    }
+                  } else {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: widget.emailController.text,
+                        password: widget.passwordController.text,
+                      );
+                    } catch (error) {
+                      setState(() {
+                        errorMessage = errorMessage.toString();
+                      });
+                    }
                   }
                 },
-                child: const Text('Log in'),
+                child: Text(
+                  isCreatingAccount == true ? 'Register' : 'Log in',
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -106,6 +123,27 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+              if (isCreatingAccount == false) ...[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      isCreatingAccount = true;
+                    });
+                  },
+                  child: const Text('Create Account'),
+                )
+              ],
+              if (isCreatingAccount == true) ...[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      isCreatingAccount = false;
+                    });
+                  },
+                  child: const Text('You already have account ?'),
+                )
+              ],
             ],
           ),
         ),
