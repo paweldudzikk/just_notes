@@ -1,17 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:just_notes/app/daily_task/daily_tasks/daily_task.dart';
+import 'package:just_notes/app/home/home_page.dart';
 import 'package:just_notes/app/note_book/note_book.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({
+class FirstPage extends StatefulWidget {
+  FirstPage({
     Key? key,
+    required this.user,
   }) : super(key: key);
 
+  final User user;
+
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FirstPage> createState() => _FirstPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _FirstPageState extends State<FirstPage> {
   var currentIndex = 0;
 
   @override
@@ -28,10 +33,10 @@ class _HomePageState extends State<HomePage> {
         }
 
         if (currentIndex == 2) {
-          return DailyTask();
+          return HomePage(user: widget.user);
         }
 
-        return DailyTask();
+        return HomePage(user: widget.user);
       }),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
