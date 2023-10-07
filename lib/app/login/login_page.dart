@@ -2,13 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({
     super.key,
   });
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  var errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Just Notes',
+                'Log in',
                 style: TextStyle(
                   fontSize: 50,
                 ),
@@ -30,26 +37,35 @@ class LoginPage extends StatelessWidget {
               ),
               TextField(
                 decoration: const InputDecoration(
-                  hintText: ('email'),
+                  hintText: 'Email',
                 ),
-                controller: emailController,
+                controller: widget.emailController,
               ),
               TextField(
                 decoration: const InputDecoration(
-                  hintText: ('password'),
+                  hintText: 'Password',
                 ),
-                controller: passwordController,
+                controller: widget.passwordController,
                 obscureText: true,
+              ),
+              Text(
+                errorMessage,
               ),
               const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
                 onPressed: () async {
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: emailController.text,
-                    password: passwordController.text,
-                  );
+                  try {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: widget.emailController.text,
+                      password: widget.passwordController.text,
+                    );
+                  } catch (error) {
+                    setState(() {
+                      errorMessage = errorMessage.toString();
+                    });
+                  }
                 },
                 child: const Text('Log in'),
               ),
@@ -73,12 +89,20 @@ class LoginPage extends StatelessWidget {
                       await FirebaseAuth.instance
                           .signInWithCredential(credential);
                     }
-                  } catch (error) {}
+                  } catch (error) {
+                    setState(() {
+                      errorMessage =
+                          'Błąd logowania z Google: ${error.toString()}';
+                    });
+                    print(error);
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset('images/google.png', height: 24.0, width: 30.0),
+                    const SizedBox(width: 8.0),
+                    const Text('Log in with Google'),
                   ],
                 ),
               ),
