@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_notes/app/home/home_page.dart';
-import 'package:just_notes/app/login/login_page.dart';
+import 'package:just_notes/app/home/my_account/my_account.dart';
+import 'package:just_notes/app/home/my_account/login_page.dart';
 import 'package:just_notes/app/note_book/cubit/note_book_cubit.dart';
 import 'package:just_notes/app/repositories/note_book_repository.dart';
 import 'package:just_notes/firebase_options.dart';
@@ -54,7 +54,7 @@ class RootPage extends StatelessWidget {
           if (user == null) {
             return LoginPage();
           }
-          return FirstPage(
+          return HomePage(
             user: user,
           );
         });

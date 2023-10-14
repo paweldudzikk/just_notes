@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:just_notes/app/daily_task/daily_tasks/daily_task.dart';
-import 'package:just_notes/app/home/home_page.dart';
+import 'package:just_notes/app/home/my_account/my_account.dart';
 import 'package:just_notes/app/note_book/note_book.dart';
 
-class FirstPage extends StatefulWidget {
-  FirstPage({
+class HomePage extends StatefulWidget {
+  const HomePage({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -13,10 +13,10 @@ class FirstPage extends StatefulWidget {
   final User user;
 
   @override
-  State<FirstPage> createState() => _FirstPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _FirstPageState extends State<FirstPage> {
+class _HomePageState extends State<HomePage> {
   var currentIndex = 0;
 
   @override
@@ -33,10 +33,14 @@ class _FirstPageState extends State<FirstPage> {
         }
 
         if (currentIndex == 2) {
-          return HomePage(user: widget.user);
+          return MyAccount(
+            user: widget.user,
+          );
         }
 
-        return HomePage(user: widget.user);
+        return MyAccount(
+          user: widget.user,
+        );
       }),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -48,9 +52,10 @@ class _FirstPageState extends State<FirstPage> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Daily task'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'NoteBook'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Notebook',
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendar',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), label: 'My Account'),
