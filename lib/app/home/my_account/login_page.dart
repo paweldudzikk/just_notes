@@ -89,40 +89,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 20,
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final GoogleSignInAccount? googleSignInAccount =
-                        await GoogleSignIn().signIn();
-                    if (googleSignInAccount != null) {
-                      final GoogleSignInAuthentication
-                          googleSignInAuthentication =
-                          await googleSignInAccount.authentication;
-                      final AuthCredential credential =
-                          GoogleAuthProvider.credential(
-                        accessToken: googleSignInAuthentication.accessToken,
-                        idToken: googleSignInAuthentication.idToken,
-                      );
-                      await FirebaseAuth.instance
-                          .signInWithCredential(credential);
-                    }
-                  } catch (error) {
-                    setState(() {
-                      errorMessage =
-                          'Błąd logowania z Google: ${error.toString()}';
-                    });
-                    print(error);
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('images/google.png', height: 24.0, width: 30.0),
-                    const SizedBox(width: 8.0),
-                    const Text('Log in with Google'),
-                  ],
-                ),
-              ),
               const SizedBox(height: 20),
               if (isCreatingAccount == false) ...[
                 TextButton(
