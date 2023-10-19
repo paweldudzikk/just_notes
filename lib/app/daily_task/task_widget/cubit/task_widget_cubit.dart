@@ -1,13 +1,15 @@
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 
 part 'task_widget_state.dart';
 
 class TaskWidgetCubit extends Cubit<TaskWidgetState> {
   TaskWidgetCubit() : super(const TaskWidgetState(isStrikethrough: false));
+
+
+  
 
   Future<void> toggleStrikethrough() async {
     final newState = !state.isStrikethrough;
@@ -49,6 +51,7 @@ class TaskWidgetCubit extends Cubit<TaskWidgetState> {
       lastDate: DateTime(2101),
     );
 
+    // ignore: use_build_context_synchronously
     TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
