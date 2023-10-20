@@ -42,13 +42,6 @@ class _TaskWidgetState extends State<TaskWidget> with TickerProviderStateMixin {
       parent: _cornerController,
       curve: Curves.easeInOut,
     ));
-
-    // Odpowiedzialne za resetowanie animacji, gdy zostanie zakończona.
-    _cornerController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _cornerController.reset();
-      }
-    });
   }
 
   @override

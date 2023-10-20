@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:just_notes/app/calendar/calendar.dart';
+
 import 'package:just_notes/app/daily_task/daily_tasks/daily_task.dart';
 import 'package:just_notes/app/home/my_account/my_account.dart';
 import 'package:just_notes/app/note_book/note_book.dart';
@@ -33,9 +35,7 @@ class _HomePageState extends State<HomePage> {
         }
 
         if (currentIndex == 2) {
-          return MyAccount(
-            user: widget.user,
-          );
+          return const EventPage();
         }
 
         return MyAccount(
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.book), label: 'NoteBook'),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
+            label: 'Events',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), label: 'My Account'),
