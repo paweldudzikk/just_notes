@@ -20,17 +20,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 161, 152, 136),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                isCreatingAccount == true ? 'Register' : 'Log in',
-                style: const TextStyle(
-                  fontSize: 50,
-                ),
+              const CircleAvatar(
+                backgroundImage: AssetImage('images/iconphoto.png'),
+                radius: 150,
               ),
               const SizedBox(
                 height: 50,
@@ -58,8 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   if (isCreatingAccount == true) {
                     try {
-                      await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
+                      await FirebaseAuth.instance.createUserWithEmailAndPassword(
                         email: widget.emailController.text,
                         password: widget.passwordController.text,
                       );
@@ -81,8 +79,12 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromARGB(255, 161, 152, 136),
+                ),
                 child: Text(
                   isCreatingAccount == true ? 'Register' : 'Log in',
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               const SizedBox(
@@ -96,7 +98,10 @@ class _LoginPageState extends State<LoginPage> {
                       isCreatingAccount = true;
                     });
                   },
-                  child: const Text('Create Account'),
+                  child: const Text(
+                    'Create Account',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
               ],
               if (isCreatingAccount == true) ...[
@@ -106,7 +111,10 @@ class _LoginPageState extends State<LoginPage> {
                       isCreatingAccount = false;
                     });
                   },
-                  child: const Text('You already have account ?'),
+                  child: const Text(
+                    'You already have account ?',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
               ],
             ],

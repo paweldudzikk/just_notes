@@ -46,6 +46,9 @@ dependencies:
   meta: ^1.9.1
   datetime_picker_formfield_new: ^2.1.0
   intl: ^0.18.1
+  googleapis: ^11.4.0
+  googleapis_auth: ^1.4.1
+  url_launcher: ^6.2.1
 
 
 dev_dependencies:
@@ -64,15 +67,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
- 
-   
+  assets:
+    - images/iconphoto.png
+
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

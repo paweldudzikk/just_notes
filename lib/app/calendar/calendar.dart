@@ -3,9 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 
 class EventPage extends StatefulWidget {
-  const EventPage({Key? key});
+  const EventPage({
+    super.key,
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _EventPageState createState() => _EventPageState();
 }
 
@@ -13,6 +16,30 @@ class _EventPageState extends State<EventPage> {
   final format = DateFormat("yyyy-MM-dd HH:mm");
   DateTime? startDate;
   DateTime? endDate;
+
+  Future<DateTime?> _selectDateTime(
+      BuildContext context, DateTime? currentValue) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(1900),
+      initialDate: currentValue ?? DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return currentValue;
+
+    final TimeOfDay? pickedTime = await Future.delayed(Duration.zero, () {
+      return showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+      );
+    });
+
+    if (pickedTime == null) return pickedDate;
+
+    return DateTime(pickedDate.year, pickedDate.month, pickedDate.day,
+        pickedTime.hour, pickedTime.minute);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +60,8 @@ class _EventPageState extends State<EventPage> {
               DateTimeField(
                 decoration: const InputDecoration(hintText: 'Event start'),
                 format: format,
-                onShowPicker: (context, currentValue) async {
-                  return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                },
+                onShowPicker: (context, currentValue) =>
+                    _selectDateTime(context, currentValue),
                 onChanged: (selectedDate) {
                   setState(() {
                     startDate = selectedDate;
@@ -50,13 +72,8 @@ class _EventPageState extends State<EventPage> {
               DateTimeField(
                 decoration: const InputDecoration(hintText: 'Event end'),
                 format: format,
-                onShowPicker: (context, currentValue) async {
-                  return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                },
+                onShowPicker: (context, currentValue) =>
+                    _selectDateTime(context, currentValue),
                 onChanged: (selectedDate) {
                   setState(() {
                     endDate = selectedDate;
